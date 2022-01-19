@@ -11,10 +11,3 @@ Type quickPow(Type base, Type exponent, Type modulo)
     }
     return result % modulo;
 }
-
-int main()
-{
-    // base number, exponent and mudulo number
-    // qpow(a, b, p);
-    return 0;
-}
