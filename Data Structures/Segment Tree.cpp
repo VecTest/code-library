@@ -1,106 +1,104 @@
 #include <bits/stdc++.h>
 
-template <typename Type>
+template<typename T>
 struct SegmentTree
 {
-    const int MaxN = 1e5 + 5;
-
-    #define ls (x << 1)
-    #define rs (x << 1 | 1)
+    static const int N = 2e5 + 5;
 
     struct Node
     {
         int l, r;
-        Type t;
-        Type d;
+        T s, t;
     };
-    Node a[MaxN];
+    Node a[N << 2];
 
-    void pushUp(int x)
+    void push_up(int x)
     {
-        a[x].d = a[ls].d + a[rs].d;
+        a[x].s = a[x << 1].s + a[x << 1 | 1].s;
         return;
     }
 
-    void pushDown(int x)
+    void push_down(int x)
     {
-        if (a[x].t)
+        Node &root = a[x], &left = a[x << 1], &right = a[x << 1 | 1];
+        if (root.t != 0 && root.l != root.r)
         {
-            a[ls].d += a[x].t * (a[ls].r - a[ls].l + 1);
-            a[ls].t += a[x].t;
+            left.s += root.t * (left.r - left.l + 1);
+            left.t += root.t;
 
-            a[rs].d += a[x].t * (a[rs].r - a[rs].l + 1);
-            a[rs].t += a[x].t;
+            right.s += root.t * (right.r - right.l + 1);
+            right.t += root.t;
 
-            a[x].t = 0;
+            root.t = 0;
         }
         return;
     }
 
-    void build(int x, int l, int r, Type *b)
+    void build(int x, int l, int r, T *b)
     {
-        a[x].l = l; a[x].r = r; a[x].t = 0;
+        a[x].l = l, a[x].r = r, a[x].t = 0;
 
         if (l == r)
         {
-            a[x].d = b[l];
+            a[x].s = b[l];
             return;
         }
 
-        int m = r + ((l - r) >> 1);
-        build(ls, l, m, b);
-        build(rs, m + 1, r, b);
+        int m = (l + r) >> 1;
+        build(x << 1, l, m, b);
+        build(x << 1 | 1, m + 1, r, b);
 
-        pushUp(x);
+        push_up(x);
 
         return;
     }
 
-    Type query(int x, int sl, int sr)
+    void modify(int x, int sl, int sr, T k)
     {
-        if (a[x].l >= sl && a[x].r <= sr)
+        Node &root = a[x], &left = a[x << 1], &right = a[x << 1 | 1];
+
+        if (root.l >= sl && root.r <= sr)
         {
-            return a[x].d;
+            root.s += k * (root.r - root.l + 1);
+            root.t += k;
+            return;
         }
 
-        pushDown(x);
-
-        Type result = 0;
-
-        if (a[ls].r >= sl)
+        push_down(x);
+        if (left.r >= sl)
         {
-            result += query(ls, sl, sr);
+            modify(x << 1, sl, sr, k);
         }
-        if (a[rs].l <= sr)
+        if (right.l <= sr)
         {
-            result += query(rs, sl, sr);
+            modify(x << 1 | 1, sl, sr, k);
+        }
+        push_up(x);
+
+        return;
+    }
+
+    T query(int x, int sl, int sr)
+    {
+        Node &root = a[x], &left = a[x << 1], &right = a[x << 1 | 1];
+
+        if (root.l >= sl && root.r <= sr)
+        {
+            return root.s;
+        }
+
+        T result = 0;
+
+        push_down(x);
+        if (left.r >= sl)
+        {
+            result += query(x << 1, sl, sr);
+        }
+        if (right.l <= sr)
+        {
+            result += query(x << 1 | 1, sl, sr);
         }
 
         return result;
-    }
-
-    void modify(int x, int sl, int sr, Type delta)
-    {
-        if (a[x].l >= sl && a[x].r <= sr)
-        {
-            a[x].d += (a[x].r - a[x].l + 1) * delta;
-            a[x].t += delta;
-            return;
-        }
-
-        pushDown(x);
-
-        if (a[ls].r >= sl)
-        {
-            modify(ls, sl, sr, delta);
-        }
-        if (a[rs].l <= sr)
-        {
-            modify(rs, sl, sr, delta);
-        }
-
-        pushUp(x);
-
-        return;
     }
 };

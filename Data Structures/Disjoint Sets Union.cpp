@@ -4,7 +4,7 @@ struct DisjointSetsUnion
 {
     static const int MaxN = 5e3 + 5;
     int p[MaxN], r[MaxN];
-    void init(int n)
+    void build(int n)
     {
         for (int i = 1; i <= n; i++)
         {
