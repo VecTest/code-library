@@ -1,9 +1,8 @@
 #include <bits/stdc++.h>
 
-const int MaxN = 5e3 + 5;
-
 struct DisjointSetsUnion
 {
+    static const int MaxN = 5e3 + 5;
     int p[MaxN], r[MaxN];
     void init(int n)
     {
@@ -20,9 +19,7 @@ struct DisjointSetsUnion
     void merge(int x, int y)
     {
         int a = get(x), b = get(y);
-
         if (a == b) { return; }
-
         if (r[a] == r[b]) { r[a]++; }
         if (r[a] >= r[b])
         {
@@ -32,33 +29,6 @@ struct DisjointSetsUnion
         {
             p[a] = b;
         }
-
         return;
     }
 };
-
-int main()
-{
-    int n, m, p;
-    DisjointSetsUnion dsu;
-
-    scanf("%d%d%d", &n, &m, &p);
-
-    dsu.init(n);
-
-    while (m--)
-    {
-        int x, y;
-        scanf("%d%d", &x, &y);
-        dsu.merge(x, y);
-    }
-
-    while (p--)
-    {
-        int x, y;
-        scanf("%d%d", &x, &y);
-        puts(dsu.get(x) == dsu.get(y) ? "Yes" : "No");
-    }
-
-    return 0;
-}
