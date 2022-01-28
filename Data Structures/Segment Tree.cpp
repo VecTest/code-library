@@ -1,104 +1,116 @@
 #include <bits/stdc++.h>
 
-template<typename T>
-struct SegmentTree
+class SegmentTree
 {
-    static const int N = 2e5 + 5;
+    private:
+
+    #define left x << 1
+    #define right x << 1 | 1
 
     struct Node
     {
         int l, r;
-        T s, t;
+        long long tag;
+        long long sum;
     };
-    Node a[N << 2];
+    Node *a;
 
     void push_up(int x)
     {
-        a[x].s = a[x << 1].s + a[x << 1 | 1].s;
+        a[x].sum = a[left].sum + a[right].sum;
         return;
     }
 
     void push_down(int x)
     {
-        Node &root = a[x], &left = a[x << 1], &right = a[x << 1 | 1];
-        if (root.t != 0 && root.l != root.r)
+        if (a[x].tag != 0 && a[x].l != a[x].r)
         {
-            left.s += root.t * (left.r - left.l + 1);
-            left.t += root.t;
+            a[left].sum += a[x].tag * (a[left].r - a[left].l + 1);
+            a[left].tag += a[x].tag;
 
-            right.s += root.t * (right.r - right.l + 1);
-            right.t += root.t;
+            a[right].sum += a[x].tag * (a[right].r - a[right].l + 1);
+            a[right].tag += a[x].tag;
 
-            root.t = 0;
+            a[x].tag = 0;
         }
         return;
     }
 
-    void build(int x, int l, int r, T *b)
+    public:
+
+    SegmentTree(int n)
     {
-        a[x].l = l, a[x].r = r, a[x].t = 0;
+        a = new Node[n << 2 | 1];
+        return;
+    }
+
+    ~SegmentTree()
+    {
+        delete a;
+        return;
+    }
+
+    void build(int x, int l, int r, long long *input)
+    {
+        a[x].l = l, a[x].r = r;
+        a[x].tag = 0;
 
         if (l == r)
         {
-            a[x].s = b[l];
+            a[x].sum = input[l];
             return;
         }
 
         int m = (l + r) >> 1;
-        build(x << 1, l, m, b);
-        build(x << 1 | 1, m + 1, r, b);
+        build(left, l, m, input);
+        build(right, m + 1, r, input);
 
         push_up(x);
-
         return;
     }
 
-    void modify(int x, int sl, int sr, T k)
+    long long query(int x, int sl, int sr)
     {
-        Node &root = a[x], &left = a[x << 1], &right = a[x << 1 | 1];
-
-        if (root.l >= sl && root.r <= sr)
+        if (a[x].l >= sl && a[x].r <= sr)
         {
-            root.s += k * (root.r - root.l + 1);
-            root.t += k;
+            return a[x].sum;
+        }
+
+        long long result = 0;
+
+        push_down(x);
+        if (a[left].r >= sl)
+        {
+            result += query(left, sl, sr);
+        }
+        if (a[right].l <= sr)
+        {
+            result += query(right, sl, sr);
+        }
+
+        return result;
+    }
+
+    void modify(int x, int sl, int sr, long long delta)
+    {
+        if (a[x].l >= sl && a[x].r <= sr)
+        {
+            a[x].sum += delta * (a[x].r - a[x].l + 1);
+            a[x].tag += delta;
             return;
         }
 
         push_down(x);
-        if (left.r >= sl)
+        if (a[left].r >= sl)
         {
-            modify(x << 1, sl, sr, k);
+            modify(left, sl, sr, delta);
         }
-        if (right.l <= sr)
+        if (a[right].l <= sr)
         {
-            modify(x << 1 | 1, sl, sr, k);
+            modify(right, sl, sr, delta);
         }
         push_up(x);
 
         return;
-    }
-
-    T query(int x, int sl, int sr)
-    {
-        Node &root = a[x], &left = a[x << 1], &right = a[x << 1 | 1];
-
-        if (root.l >= sl && root.r <= sr)
-        {
-            return root.s;
-        }
-
-        T result = 0;
-
-        push_down(x);
-        if (left.r >= sl)
-        {
-            result += query(x << 1, sl, sr);
-        }
-        if (right.l <= sr)
-        {
-            result += query(x << 1 | 1, sl, sr);
-        }
-
-        return result;
     }
 };
