@@ -4,10 +4,16 @@ struct DisjointSetsUnion
 {
     int *p, *r;
 
+    DisjointSetsUnion() { return; }
+
     DisjointSetsUnion(int n)
     {
         p = new int[n + 5];
         r = new int[n + 5];
+        for (int i = 1; i <= n; i++)
+        {
+            p[i] = i; r[i] = 1;
+        }
         return;
     }
 
@@ -18,8 +24,10 @@ struct DisjointSetsUnion
         return;
     }
 
-    void build(int n)
+    void assign(int n)
     {
+        p = new int[n + 5];
+        r = new int[n + 5];
         for (int i = 1; i <= n; i++)
         {
             p[i] = i; r[i] = 1;

@@ -10,7 +10,7 @@ struct MinHeap
 
     int son(int x)
     {
-        return x << 1 | (x << 1 | 1 <= _size && a[x << 1] > a[x << 1 | 1]);
+        return x << 1 | ((x << 1 | 1) <= _size && a[x << 1] > a[x << 1 | 1]);
     }
 
     void swim(int x)
@@ -50,7 +50,9 @@ struct MinHeap
     }
 
     T top() { return a[1]; }
+
     int size() { return _size; }
+
     bool empty() { return !_size; }
 
     void push(T k)
