@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 
-class SegmentTree
+struct SegmentTree
 {
     private:
 
@@ -38,6 +38,8 @@ class SegmentTree
 
     public:
 
+    SegmentTree() { return; }
+
     SegmentTree(int n)
     {
         a = new Node[n << 2 | 1];
@@ -47,6 +49,12 @@ class SegmentTree
     ~SegmentTree()
     {
         delete a;
+        return;
+    }
+
+    void assign(int n)
+    {
+        a = new Node[n << 2 | 1];
         return;
     }
 
