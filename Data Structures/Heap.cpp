@@ -27,7 +27,10 @@ struct MinHeap
 
     public:
 
-    MinHeap() { return; }
+    MinHeap()
+    {
+        return;
+    }
 
     MinHeap(int n)
     {
@@ -49,11 +52,20 @@ struct MinHeap
         return;
     }
 
-    T top() { return a[1]; }
+    T top()
+    {
+        return a[1];
+    }
 
-    int size() { return _size; }
+    int size()
+    {
+        return _size;
+    }
 
-    bool empty() { return !_size; }
+    bool empty()
+    {
+        return !_size;
+    }
 
     void push(T k)
     {

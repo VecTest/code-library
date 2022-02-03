@@ -4,7 +4,10 @@ struct DisjointSetsUnion
 {
     int *p, *r;
 
-    DisjointSetsUnion() { return; }
+    DisjointSetsUnion()
+    {
+        return;
+    }
 
     DisjointSetsUnion(int n)
     {
