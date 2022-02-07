@@ -76,7 +76,7 @@ struct MinHeap
 
     void pop()
     {
-        if (!_size) exit(-1);
+        assert(_size);
         a[1] = a[_size--];
         sink(1);
         return;
