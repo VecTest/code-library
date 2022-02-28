@@ -3,8 +3,7 @@
 template <typename T>
 struct MinHeap
 {
-    private:
-
+private:
     T *a;
     int _size;
 
@@ -15,18 +14,23 @@ struct MinHeap
 
     void swim(int x)
     {
-        for (int i = x; i > 1 && a[i] < a[i >> 1]; i >>= 1) std::swap(a[i], a[i >> 1]);
+        for (int i = x; i > 1 && a[i] < a[i >> 1]; i >>= 1)
+        {
+            std::swap(a[i], a[i >> 1]);
+        }
         return;
     }
 
     void sink(int x)
     {
-        for (int i = x, t = son(i); t <= _size && a[i] > a[t]; i = t, t = son(i)) std::swap(a[i], a[t]);
+        for (int i = x, t = son(i); t <= _size && a[i] > a[t]; i = t, t = son(i))
+        {
+            std::swap(a[i], a[t]);
+        }
         return;
     }
 
-    public:
-
+public:
     MinHeap()
     {
         return;

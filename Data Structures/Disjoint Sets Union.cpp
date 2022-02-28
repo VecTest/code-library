@@ -15,7 +15,8 @@ struct DisjointSetsUnion
         r = new int[n + 5];
         for (int i = 1; i <= n; i++)
         {
-            p[i] = i; r[i] = 1;
+            p[i] = i;
+            r[i] = 1;
         }
         return;
     }
@@ -33,7 +34,8 @@ struct DisjointSetsUnion
         r = new int[n + 5];
         for (int i = 1; i <= n; i++)
         {
-            p[i] = i; r[i] = 1;
+            p[i] = i;
+            r[i] = 1;
         }
         return;
     }
@@ -46,9 +48,15 @@ struct DisjointSetsUnion
     void merge(int x, int y)
     {
         int a = get(x), b = get(y);
-        if (a == b) { return; }
+        if (a == b)
+        {
+            return;
+        }
 
-        if (r[a] == r[b]) { r[a]++; }
+        if (r[a] == r[b])
+        {
+            r[a]++;
+        }
 
         if (r[a] >= r[b])
         {

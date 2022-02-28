@@ -2,10 +2,9 @@
 
 struct SegmentTree
 {
-    private:
-
-    #define left x << 1
-    #define right x << 1 | 1
+private:
+#define left x << 1
+#define right x << 1 | 1
 
     struct Node
     {
@@ -36,8 +35,7 @@ struct SegmentTree
         return;
     }
 
-    public:
-
+public:
     SegmentTree()
     {
         return;
