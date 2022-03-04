@@ -2,91 +2,59 @@
 
 struct Trie
 {
-private:
-    static constexpr int N = 1 << 7 | 1;
+    static const int N = 26;
 
-    int _size;
-    int *a[N];
-    int *tag;
+    struct Node
+    {
+        Node *son[N];
+        int key;
+        Node()
+        {
+            key = 0;
+            for (int i = 0; i < N; i++)
+            {
+                son[i] = nullptr;
+            }
+            return;
+        }
+    } * root;
 
-public:
     Trie()
     {
-        return;
-    }
-
-    Trie(int n)
-    {
-        for (int i = 0; i < N; i++)
-        {
-            a[i] = new int[n + 5];
-        }
-        tag = new int[n + 5];
-
-        _size = 0;
-        for (int i = 0; i < N; i++)
-        {
-            memset(a[i], 0, sizeof(int) * (n + 5));
-        }
-        memset(tag, false, sizeof(int) * (n + 5));
-        return;
-    }
-
-    ~Trie()
-    {
-        for (int i = 0; i < N; i++)
-        {
-            delete a[i];
-        }
-        delete tag;
-        return;
-    }
-
-    void assign(int n)
-    {
-        for (int i = 0; i < N; i++)
-        {
-            a[i] = new int[n + 5];
-        }
-        tag = new int[n + 5];
-
-        _size = 0;
-        for (int i = 0; i < N; i++)
-        {
-            memset(a[i], 0, sizeof(int) * (n + 5));
-        }
-        memset(tag, 0, sizeof(int) * (n + 5));
+        root = new Node;
         return;
     }
 
     void insert(char *s, int k)
     {
-        int x = 0, l = strlen(s);
+        int l = strlen(s);
+        Node *x = root;
         for (int i = 0; i < l; i++)
         {
-            int c = s[i];
-            if (!a[c][x])
+            int y = s[i] - 'a';
+            if (x->son[y] == nullptr)
             {
-                a[c][x] = ++_size;
+                x->son[y] = new Node;
             }
-            x = a[c][x];
+            x = x->son[y];
         }
-        tag[x] = k;
+        x->key = k;
         return;
     }
 
     int get(char *s)
     {
-        int x = 0, l = strlen(s);
+        int l = strlen(s);
+        Node *x = root;
         for (int i = 0; i < l; i++)
         {
-            int c = s[i];
-            if (!a[c][x])
+            int y = s[i] - 'a';
+            if (x->son[y] == nullptr)
             {
                 return 0;
             }
-            x = a[c][x];
+            x = x->son[y];
         }
-        return tag[x];
+        return x->key;
     }
 };
