@@ -13,14 +13,14 @@ struct FenwickTree
 
     FenwickTree(int _n) : n(_n)
     {
-        a.resize(n + 5);
+        a.assign(n + 1, 0);
         return;
     }
 
     void resize(int _n)
     {
         n = _n;
-        a.resize(n + 5);
+        a.assign(n + 1, 0);
         return;
     }
 
@@ -52,7 +52,6 @@ struct FenwickTree
 
     void build(std::vector<int> b)
     {
-        std::fill(a.begin(), a.end(), 0);
         for (int i = 1; i <= n; i++)
         {
             a[i] += b[i];
