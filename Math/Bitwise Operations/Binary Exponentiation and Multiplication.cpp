@@ -11,3 +11,15 @@ int power(int a, int b, int p) {
     }
     return r;
 }
+
+long long multiply(long long a, long long b, long long p) {
+    long long r = 0;
+    while (b) {
+        if (b & 1) {
+            r = (r + a) % p;
+        }
+        a = (a << 1) % p;
+        b >>= 1;
+    }
+    return r;
+}
