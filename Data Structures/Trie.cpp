@@ -17,7 +17,7 @@ struct Trie
             }
             return;
         }
-    } * root;
+    } *root;
 
     Trie()
     {
@@ -32,13 +32,13 @@ struct Trie
         for (int i = 0; i < l; i++)
         {
             int y = s[i] - 'a';
-            if (x->son[y] == nullptr)
+            if (x -> son[y] == nullptr)
             {
-                x->son[y] = new Node;
+                x -> son[y] = new Node;
             }
-            x = x->son[y];
+            x = x -> son[y];
         }
-        x->key = k;
+        x -> key = k;
         return;
     }
 
@@ -49,12 +49,12 @@ struct Trie
         for (int i = 0; i < l; i++)
         {
             int y = s[i] - 'a';
-            if (x->son[y] == nullptr)
+            if (x -> son[y] == nullptr)
             {
                 return 0;
             }
-            x = x->son[y];
+            x = x -> son[y];
         }
-        return x->key;
+        return x -> key;
     }
 };
