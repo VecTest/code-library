@@ -1,13 +1,13 @@
 #include <bits/stdc++.h>
 
-int power(int base, int exponent, int modulo) {
-    int result = 1 % modulo;
-    while (exponent) {
-        if (exponent & 1) {
-            result = (long long) result * base % modulo;
+int power(int a, int b, int p) {
+    int r = 1 % p;
+    while (b) {
+        if (b & 1) {
+            r = (long long) r * a % p;
         }
-        base = (long long) base * base % modulo;
-        exponent >>= 1;
+        a = (long long) a * a % p;
+        b >>= 1;
     }
-    return result;
+    return r;
 }
