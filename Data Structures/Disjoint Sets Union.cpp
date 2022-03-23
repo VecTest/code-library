@@ -1,71 +1,38 @@
 #include <bits/stdc++.h>
 
-struct DisjointSetsUnion
-{
-    int *p, *r;
-
-    DisjointSetsUnion()
-    {
+struct DisjointSetsUnion {
+    std::vector<int> p, s;
+    DisjointSetsUnion(int n) : p(n + 1), s(n + 1, 1) {
+        std::iota(p.begin(), p.end(), 0);
         return;
     }
-
-    DisjointSetsUnion(int n)
-    {
-        p = new int[n + 5];
-        r = new int[n + 5];
-        for (int i = 1; i <= n; i++)
-        {
-            p[i] = i;
-            r[i] = 1;
-        }
+    void resize(int n) {
+        p.resize(n + 1);
+        s.assign(n + 1, 1);
+        std::iota(p.begin(), p.end(), 0);
         return;
     }
-
-    ~DisjointSetsUnion()
-    {
-        delete p;
-        delete r;
-        return;
+    int find(int x) {
+        return p[x] = (x == p[x] ? x : find(p[x]));
     }
-
-    void assign(int n)
-    {
-        p = new int[n + 5];
-        r = new int[n + 5];
-        for (int i = 1; i <= n; i++)
-        {
-            p[i] = i;
-            r[i] = 1;
-        }
-        return;
+    bool same(int x, int y) {
+        return find(x) == find(y);
     }
-
-    int get(int x)
-    {
-        return p[x] = (x == p[x] ? x : get(p[x]));
+    bool merge(int x, int y) {
+        x = find(x);
+        y = find(y);
+        if (x == y) {
+            return false;
+        }
+        if (s[x] > s[y]) {
+            std::swap(x, y);
+        }
+        s[y] += s[x];
+        p[x] = y;
+        return true;
     }
-
-    void merge(int x, int y)
-    {
-        int a = get(x), b = get(y);
-        if (a == b)
-        {
-            return;
-        }
-
-        if (r[a] == r[b])
-        {
-            r[a]++;
-        }
-
-        if (r[a] >= r[b])
-        {
-            p[b] = a;
-        }
-        else if (r[a] < r[b])
-        {
-            p[a] = b;
-        }
-        return;
+    int size(int x) {
+        return s[find(x)];
     }
 };
+using DSU = DisjointSetsUnion;
