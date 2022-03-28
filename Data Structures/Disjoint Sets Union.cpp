@@ -2,13 +2,13 @@
 
 struct DisjointSetsUnion {
     std::vector<int> p, s;
-    DisjointSetsUnion(int n) : p(n + 1), s(n + 1, 1) {
+    DisjointSetsUnion(int n) : p(n), s(n, 1) {
         std::iota(p.begin(), p.end(), 0);
         return;
     }
     void resize(int n) {
-        p.resize(n + 1);
-        s.assign(n + 1, 1);
+        p.resize(n);
+        s.assign(n, 1);
         std::iota(p.begin(), p.end(), 0);
         return;
     }
