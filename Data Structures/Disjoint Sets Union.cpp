@@ -6,12 +6,6 @@ struct DisjointSetsUnion {
         std::iota(p.begin(), p.end(), 0);
         return;
     }
-    void resize(int n) {
-        p.resize(n);
-        s.assign(n, 1);
-        std::iota(p.begin(), p.end(), 0);
-        return;
-    }
     int find(int x) {
         return p[x] = (x == p[x] ? x : find(p[x]));
     }
