@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 
-struct SegmentTree {
-    struct Node {
-        long long key, tag;
-    };
+struct Node {
+    long long key, tag;
+};
 
+struct SegmentTree {
     int n;
     std::vector<Node> a;
 
