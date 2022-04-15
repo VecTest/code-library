@@ -8,6 +8,11 @@ struct SegmentTree {
     int n;
     std::vector<Node> a;
 
+    void set(int x, int d) {
+        a[x].key = d;
+        a[x].tag = 0;
+    }
+
     void pull(int x) {
         a[x].key = a[x * 2 + 1].key + a[x * 2 + 2].key;
     }
@@ -28,8 +33,7 @@ struct SegmentTree {
 
     void build(std::vector<int> &p, int x, int lx, int rx) {
         if (lx == rx) {
-            a[x].key = p[lx];
-            a[x].tag = 0;
+            set(x, p[lx]);
             return;
         }
         int m = (lx + rx) >> 1;
