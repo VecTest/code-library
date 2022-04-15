@@ -92,12 +92,12 @@ struct SegmentTree {
         modify(l, r, d, 0, 0, n - 1);
     }
 
-    void test() {
-        std::cout << "test:\n";
-        std::cout << a[0].key << "\n";
-        std::cout << a[1].key << "\n";
-        std::cout << a[2].key << "\n";
-        std::cout << "\n";
-    }
+    // void test() {
+    //     std::cout << "test:\n";
+    //     std::cout << a[0].key << "\n";
+    //     std::cout << a[1].key << "\n";
+    //     std::cout << a[2].key << "\n";
+    //     std::cout << "\n";
+    // }
 };
 using ST = SegmentTree;
