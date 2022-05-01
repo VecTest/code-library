@@ -81,23 +81,3 @@ struct Trie {
         destroy(s);
     }
 };
-
-void solve() {
-    int l, r;
-    std::cin >> l >> r;
-
-    int n = r - l + 1;
-    std::vector<int> a(n);
-    for (int i = 0; i < n; i++) {
-        std::cin >> a[i];
-    }
-
-    Trie tr(a);
-    for (int i = 0; i < n; i++) {
-        int x = a[i] ^ l;
-        if (tr.get_min(x) == l && tr.get_max(x) == r) {
-            std::cout << x << "\n";
-            return;
-        }
-    }
-}
