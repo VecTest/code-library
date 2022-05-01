@@ -1,75 +1,103 @@
 #include <bits/stdc++.h>
 
 struct Trie {
-    static const int BIT = 31;
+    static const int K = 31;
 
     struct Node {
-        Node *ch[2] = {nullptr, nullptr};
+        Node *c[2];
+
+        Node() {
+            c[0] = c[1] = nullptr;
+        }
     };
-    Node *root;
+    Node *s;
 
-    void insert(int k) {
-        Node *x = root;
-        for (int i = BIT - 1; i >= 0; i--) {
-            int b = (k >> i) & 1;
-            if (x -> ch[b] == nullptr) {
-                x -> ch[b] = new Node;
+    void insert(int key) {
+        Node *x = s;
+        for (int i = K - 1; i >= 0; i--) {
+            int b = (key >> i) & 1;
+            if (x -> c[b] == nullptr) {
+                x -> c[b] = new Node;
             }
-            x = x -> ch[b];
+            x = x -> c[b];
         }
     }
 
-    int get_max(int k) {
-        Node *x = root;
-        int ans = 0;
-        for (int i = BIT - 1; i >= 0; i--) {
-            int b = (k >> i) & 1;
-            if (x -> ch[b ^ 1] != nullptr) {
-                ans |= (1 << i);
-                x = x -> ch[b ^ 1];
+    int get_max(int key) {
+        Node *x = s;
+        int answer = 0;
+
+        for (int i = K - 1; i >= 0; i--) {
+            int b = (key >> i) & 1;
+            if (x -> c[b ^ 1] != nullptr) {
+                answer |= (1 << i);
+                x = x -> c[b ^ 1];
             } else {
-                x = x -> ch[b];
+                x = x -> c[b];
             }
         }
-        return ans;
+
+        return answer;
     }
 
-    int get_min(int k) {
-        Node *x = root;
-        int ans = 0;
-        for (int i = BIT - 1; i >= 0; i--) {
-            int b = (k >> i) & 1;
-            if (x -> ch[b] != nullptr) {
-                x = x -> ch[b];
+    int get_min(int key) {
+        Node *x = s;
+        int answer = 0;
+
+        for (int i = K - 1; i >= 0; i--) {
+            int b = (key >> i) & 1;
+            if (x -> c[b] != nullptr) {
+                x = x -> c[b];
             } else {
-                ans |= (1 << i);
-                x = x -> ch[b ^ 1];
+                answer |= (1 << i);
+                x = x -> c[b ^ 1];
             }
         }
-        return ans;
+
+        return answer;
     }
 
     void destroy(Node *x) {
         for (int i = 0; i < 2; i++) {
-            if (x -> ch[i] != nullptr) {
-                destroy(x -> ch[i]);
+            if (x -> c[i] != nullptr) {
+                destroy(x -> c[i]);
             }
         }
         delete(x);
     }
 
     Trie() {
-        root = new Node;
+        s = new Node;
     }
 
     Trie(std::vector<int> &p) {
-        root = new Node;
-        for (auto &x : p) {
-            insert(x);
+        s = new Node;
+        for (int i = 0; i < (int) p.size(); i++) {
+            insert(p[i]);
         }
     }
 
     ~Trie() {
-        destroy(root);
+        destroy(s);
     }
 };
+
+void solve() {
+    int l, r;
+    std::cin >> l >> r;
+
+    int n = r - l + 1;
+    std::vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        std::cin >> a[i];
+    }
+
+    Trie tr(a);
+    for (int i = 0; i < n; i++) {
+        int x = a[i] ^ l;
+        if (tr.get_min(x) == l && tr.get_max(x) == r) {
+            std::cout << x << "\n";
+            return;
+        }
+    }
+}
