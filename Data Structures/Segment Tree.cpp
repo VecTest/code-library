@@ -1,103 +1,94 @@
 #include <bits/stdc++.h>
 
 struct Node {
-    long long key, tag;
+    int key;
+    int prefix, suffix, sum;
+
+    void apply(int x) {
+        key = prefix = suffix = x;
+        sum = x;
+    }
 };
 
 struct SegmentTree {
+    static const int INF = 1e9;
+
     int n;
     std::vector<Node> a;
+    Node NEUTRAL_ELEMENT = {-INF, -INF, -INF, -INF};
 
-    void set(int x, int d) {
-        a[x].key = d;
-        a[x].tag = 0;
+    Node merge(Node &x, Node &y) {
+        return {
+            std::max({x.key, y.key, x.suffix + y.prefix}),
+            std::max(x.prefix, x.sum + y.prefix),
+            std::max(y.suffix, y.sum + x.suffix),
+            x.sum + y.sum
+        };
     }
 
     void pull(int x) {
-        a[x].key = a[x * 2 + 1].key + a[x * 2 + 2].key;
+        a[x] = merge(a[x * 2 + 1], a[x * 2 + 2]);
     }
 
-    void push(int x, int lx, int rx) {
-        if (a[x].tag != 0 && lx != rx) {
-            int m = (lx + rx) >> 1;
+    void push(int x) {
 
-            a[x * 2 + 1].tag += a[x].tag;
-            a[x * 2 + 1].key += (m - lx + 1) * a[x].tag;
-
-            a[x * 2 + 2].tag += a[x].tag;
-            a[x * 2 + 2].key += (rx - m) * a[x].tag;
-
-            a[x].tag = 0;
-        }
     }
 
-    void build(std::vector<int> &p, int x, int lx, int rx) {
+    void build(int x, int lx, int rx, std::vector<int> &p) {
         if (lx == rx) {
-            set(x, p[lx]);
+            a[x].apply(p[lx]);
             return;
         }
         int m = (lx + rx) >> 1;
-        build(p, x * 2 + 1, lx, m);
-        build(p, x * 2 + 2, m + 1, rx);
+        build(x * 2 + 1, lx, m, p);
+        build(x * 2 + 2, m + 1, rx, p);
         pull(x);
     }
 
-    void build(std::vector<int> &p) {
-        n = (int) p.size();
-        a.resize(n << 2);
-        build(p, 0, 0, n - 1);
+    Node query(int x, int lx, int rx, int l, int r) {
+        if (l <= lx && rx <= r) {
+            return a[x];
+        }
+        if (rx < l || r < lx) {
+            return NEUTRAL_ELEMENT;
+        }
+        push(x);
+        int m = (lx + rx) >> 1;
+        Node p = query(x * 2 + 1, lx, m, l, r), q = query(x * 2 + 2, m + 1, rx, l, r);
+        return merge(p, q);
+    }
+
+    Node query(int l, int r) {
+        return query(0, 0, n - 1, l, r);
+    }
+
+    void modify(int x, int lx, int rx, int p, int k) {
+        if (lx == rx) {
+            a[x].apply(k);
+            return;
+        }
+        push(x);
+        int m = (lx + rx) >> 1;
+        if (p <= m) {
+            modify(x * 2 + 1, lx, m, p, k);
+        } else if (m < p) {
+            modify(x * 2 + 2, m + 1, rx, p, k);
+        }
+        pull(x);
+    }
+
+    void modify(int p, int k) {
+        modify(0, 0, n - 1, p, k);
+    }
+
+    SegmentTree() {
+
     }
 
     SegmentTree(std::vector<int> &p) {
-        build(p);
+        n = (int) p.size();
+        assert(n > 0);
+        a.resize(n << 2);
+        build(0, 0, n - 1, p);
     }
-
-    long long query(int l, int r, int x, int lx, int rx) {
-        if (l <= lx && rx <= r) {
-            return a[x].key;
-        } else if (rx < l || r < lx) {
-            return 0;
-        }
-        push(x, lx, rx);
-        int m = (lx + rx) >> 1;
-        long long ls = query(l, r, x * 2 + 1, lx, m);
-        long long rs = query(l, r, x * 2 + 2, m + 1, rx);
-        return ls + rs;
-    }
-
-    long long query(int l, int r) {
-        return query(l, r, 0, 0, n - 1);
-    }
-
-    void modify(int l, int r, int d, int x, int lx, int rx) {
-        if (l <= lx && rx <= r) {
-            a[x].key += (rx - lx + 1) * (long long) d;
-            a[x].tag += d;
-            return;
-        } else if (rx < l || r < lx) {
-            return;
-        }
-        push(x, lx, rx);
-        int m = (lx + rx) >> 1;
-        if (l <= m) {
-            modify(l, r, d, x * 2 + 1, lx, m);
-        }
-        if (m + 1 <= r) {
-            modify(l, r, d, x * 2 + 2, m + 1, rx);
-        }
-        pull(x);
-    }
-
-    void modify(int l, int r, int d) {
-        modify(l, r, d, 0, 0, n - 1);
-    }
-
-    // void test() {
-    //     std::cout << "test:\n";
-    //     std::cout << a[0].key << "\n";
-    //     std::cout << a[1].key << "\n";
-    //     std::cout << a[2].key << "\n";
-    //     std::cout << "\n";
-    // }
 };
-using ST = SegmentTree;
