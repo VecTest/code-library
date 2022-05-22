@@ -14,7 +14,7 @@ const int INF = 1e9;
 struct Edge {
     int v, w;
 };
-using Graph = std::vector<std::vector<Edge>>;
+using Edges = std::vector<std::vector<Edge>>;
 
 struct Vertex {
     int d, p;
@@ -23,7 +23,7 @@ struct Vertex {
     }
 };
 
-std::vector<int> Dijkstra(int n, int s, Graph &e) {
+std::vector<int> Dijkstra(int n, int s, Edges &e) {
     std::vector<int> d(n, INF);
     d[s] = 0;
 
@@ -53,7 +53,7 @@ std::vector<int> Dijkstra(int n, int s, Graph &e) {
     return d;
 }
 
-void add(int u, int v, int d, Graph &e) {
+void add(int u, int v, int d, Edges &e) {
     e[u].push_back({v, d});
 }
 
@@ -69,7 +69,7 @@ int main() {
 
     // 有 k + 1 层，每层有 n 个点，故最大编号为 (k + 1) * n - 1
     int p = (k + 1) * n; // 总点数
-    Graph e(p);
+    Edges e(p);
 
     for (int i = 0; i < m; i++) {
         int u, v, d;
