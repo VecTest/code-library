@@ -1,27 +1,21 @@
 #include <bits/stdc++.h>
 
 struct Node {
-    int key;
-    int prefix, suffix, sum;
+    int sum;
 
     void apply(int x) {
-        key = prefix = suffix = x;
         sum = x;
     }
 };
 
 struct SegmentTree {
-    static const int INF = 1e9;
-
     int n;
     std::vector<Node> a;
-    Node NEUTRAL_ELEMENT = {-INF, -INF, -INF, -INF};
 
-    Node merge(Node &x, Node &y) {
+    Node NEUTRAL_ELEMENT = {0};
+
+    Node merge(Node x, Node y) {
         return {
-            std::max({x.key, y.key, x.suffix + y.prefix}),
-            std::max(x.prefix, x.sum + y.prefix),
-            std::max(y.suffix, y.sum + x.suffix),
             x.sum + y.sum
         };
     }
@@ -35,50 +29,51 @@ struct SegmentTree {
     }
 
     void build(int x, int lx, int rx, std::vector<int> &p) {
-        if (lx == rx) {
+        if (rx - lx == 1) {
             a[x].apply(p[lx]);
-            return;
+        } else {
+            int m = (lx + rx) / 2;
+            build(x * 2 + 1, lx, m, p);
+            build(x * 2 + 2, m, rx, p);
+            pull(x);
         }
-        int m = (lx + rx) >> 1;
-        build(x * 2 + 1, lx, m, p);
-        build(x * 2 + 2, m + 1, rx, p);
-        pull(x);
     }
 
     Node query(int x, int lx, int rx, int l, int r) {
         if (l <= lx && rx <= r) {
             return a[x];
-        }
-        if (rx < l || r < lx) {
+        } else if (rx <= l || r <= lx) {
             return NEUTRAL_ELEMENT;
+        } else {
+            push(x);
+            int m = (lx + rx) / 2;
+            Node p = query(x * 2 + 1, lx, m, l, r), q = query(x * 2 + 2, m, rx, l, r);
+            return merge(p, q);
         }
-        push(x);
-        int m = (lx + rx) >> 1;
-        Node p = query(x * 2 + 1, lx, m, l, r), q = query(x * 2 + 2, m + 1, rx, l, r);
-        return merge(p, q);
     }
 
     Node query(int l, int r) {
-        return query(0, 0, n - 1, l, r);
+        return query(0, 0, n, l, r);
     }
 
     void modify(int x, int lx, int rx, int p, int k) {
-        if (lx == rx) {
-            a[x].apply(k);
-            return;
+        if (rx - lx == 1) {
+            // a[x].apply(k);
+            a[x].sum += k;
+        } else {
+            push(x);
+            int m = (lx + rx) / 2;
+            if (p < m) {
+                modify(x * 2 + 1, lx, m, p, k);
+            } else {
+                modify(x * 2 + 2, m, rx, p, k);
+            }
+            pull(x);
         }
-        push(x);
-        int m = (lx + rx) >> 1;
-        if (p <= m) {
-            modify(x * 2 + 1, lx, m, p, k);
-        } else if (m < p) {
-            modify(x * 2 + 2, m + 1, rx, p, k);
-        }
-        pull(x);
     }
 
     void modify(int p, int k) {
-        modify(0, 0, n - 1, p, k);
+        modify(0, 0, n, p, k);
     }
 
     SegmentTree() {
@@ -86,9 +81,49 @@ struct SegmentTree {
     }
 
     SegmentTree(std::vector<int> &p) {
-        n = (int) p.size();
-        assert(n > 0);
-        a.resize(n << 2);
-        build(0, 0, n - 1, p);
+        assert(p.size() > 0);
+        for (n = 1; n < (int) p.size(); ) {
+            n *= 2;
+        }
+        a = std::vector<Node>(n * 2);
+        build(0, 0, n, p);
     }
 };
+
+int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+
+    int n, m;
+    std::cin >> n >> m;
+
+    std::vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        std::cin >> a[i];
+    }
+
+    SegmentTree st(a);
+
+    for (int i = 0; i < m; i++) {
+        int opt;
+        std::cin >> opt;
+
+        if (opt == 1) {
+            int p, k;
+            std::cin >> p >> k;
+            p--;
+            st.modify(p, k);
+        } else if (opt == 2) {
+            int l, r;
+            std::cin >> l >> r;
+            l--;
+            std::cout << st.query(l, r).sum << "\n";
+        }
+    }
+
+#ifdef LOCAL
+    std::cout << std::flush;
+    system("pause");
+#endif
+    return 0;
+}
