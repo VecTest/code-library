@@ -1,4 +1,3 @@
-// #include <bits/stdc++.h>
 #include <cmath>
 #include <vector>
 #include <cstdio>
@@ -28,7 +27,6 @@ bool good(long double x) {
 
 int main() {
     std::ios::sync_with_stdio(false);
-    // std::cin.tie(nullptr);
 
     std::cin >> n >> k;
 

@@ -13,7 +13,6 @@ http://poj.org/problem?id=3617
 
 int main() {
     std::ios::sync_with_stdio(false);
-    // std::cin.tie(nullptr);
 
     int n;
     std::cin >> n;
