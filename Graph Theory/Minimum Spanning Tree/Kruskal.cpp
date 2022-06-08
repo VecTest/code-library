@@ -1,85 +1,62 @@
 #include <bits/stdc++.h>
 
-const int MaxN = 5e3 + 5, MaxM = 2e5 + 5;
-
-struct DisjointSetsUnion
-{
-    int p[MaxN], r[MaxN];
-    void init(int n)
-    {
-        for (int i = 1; i <= n; i++)
-        {
-            p[i] = i; r[i] = 1;
-        }
-        return;
+struct DisjointSetsUnion {
+    std::vector<int> p, s;
+    DisjointSetsUnion(int n) : p(n), s(n, 1) {
+        std::iota(p.begin(), p.end(), 0);
     }
-    int get(int x)
-    {
-        return p[x] = (x == p[x] ? x : get(p[x]));
+    DisjointSetsUnion() {
+
     }
-    void merge(int x, int y)
-    {
-        int a = get(x), b = get(y);
-
-        if (a == b) { return; }
-
-        if (r[a] == r[b]) { r[a]++; }
-        if (r[a] >= r[b])
-        {
-            p[b] = a;
+    int find(int x) {
+        return p[x] = (x == p[x] ? x : find(p[x]));
+    }
+    bool same(int x, int y) {
+        return find(x) == find(y);
+    }
+    bool merge(int x, int y) {
+        x = find(x);
+        y = find(y);
+        if (x == y) {
+            return false;
         }
-        else if (r[a] < r[b])
-        {
-            p[a] = b;
+        if (s[x] > s[y]) {
+            std::swap(x, y);
         }
+        s[y] += s[x];
+        p[x] = y;
+        return true;
+    }
+    int size(int x) {
+        return s[find(x)];
+    }
+};
+using DSU = DisjointSetsUnion;
 
-        return;
+struct Edge {
+    int u, v, w;
+
+    bool operator < (const Edge &x) const {
+        return w < x.w;
     }
 };
 
-struct Edge
-{
-    int u, v, d;
-    bool operator < (const Edge &x) const
-    {
-        return d < x.d;
-    }
-};
+int Kruskal(int n, int m, std::vector<Edge> &e) {
+    std::sort(e.begin(), e.end());
 
-int Kruskal(int n, int m, Edge *e)
-{
-    int count = 0, dis = 0;
-    DisjointSetsUnion dsu;
-
-    dsu.init(n);
-    std::sort(e, e + m);
-
-    for (int i = 0; i < m; i++)
-    {
-        int u = dsu.get(e[i].u), v = dsu.get(e[i].v);
-        if (u == v) { continue; }
-        dis += e[i].d;
-        dsu.merge(e[i].u, e[i].v);
-        if (++count == n - 1) { break; }
+    DSU dsu(n);
+    int ans = 0, c = 0;
+    for (int i = 0; i < m; i++) {
+        int u = dsu.find(e[i].u), v = dsu.find(e[i].v);
+        if (!dsu.same(u, v)) {
+            ans += e[i].w;
+            dsu.merge(u, v);
+            if (++c == n - 1) {
+                break;
+            }
+        }
     }
 
-    return count == n - 1 ? dis : -1;
-}
-
-int main()
-{
-    int n, m;
-    Edge e[MaxM];
-
-    scanf("%d%d", &n, &m);
-    for (int i = 0; i < m; i++)
-    {
-        scanf("%d%d%d", &e[i].u, &e[i].v, &e[i].d);
-    }
-
-    int dis = Kruskal(n, m, e); // if dis equals to -1, then the gragh is not connected
-
-    printf("%d\n", dis);
-
-    return 0;
+    assert(c == n - 1);
+    return ans;
 }
