@@ -6,15 +6,13 @@
 大致思路：
 并查集
 
-
-
 提交地址：
 http://poj.org/problem?id=1611
 */
 
 struct DisjointSetsUnion {
     std::vector<int> p, s;
-    DisjointSetsUnion(int n) : p(n), s(n, 1) {
+    DisjointSetsUnion(int n): p(n), s(n, 1) {
         for (int i = 0; i < n; i++) {
             p[i] = i;
         }

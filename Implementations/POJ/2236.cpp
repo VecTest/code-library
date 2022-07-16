@@ -6,15 +6,13 @@
 大致思路：
 并查集 + 欧几里得距离 + 模拟
 
-
-
 提交地址：
 http://poj.org/problem?id=2236
 */
 
 struct DisjointSetsUnion {
     std::vector<int> p, s;
-    DisjointSetsUnion(int n) : p(n), s(n, 1) {
+    DisjointSetsUnion(int n): p(n), s(n, 1) {
         std::iota(p.begin(), p.end(), 0);
     }
     DisjointSetsUnion() {

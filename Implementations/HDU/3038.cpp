@@ -6,15 +6,13 @@
 大致思路：
 带权并查集
 
-
-
 提交地址：
 http://acm.hdu.edu.cn/showproblem.php?pid=3038
 */
 
 struct DisjointSetsUnion {
     std::vector<int> p, k;
-    DisjointSetsUnion(int n) : p(n), k(n, 0) {
+    DisjointSetsUnion(int n): p(n), k(n, 0) {
         std::iota(p.begin(), p.end(), 0);
     }
     DisjointSetsUnion() {

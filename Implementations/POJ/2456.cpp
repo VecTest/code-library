@@ -6,8 +6,6 @@
 大致思路：
 二分 + 贪心
 
-
-
 提交地址：
 http://poj.org/problem?id=2456
 */

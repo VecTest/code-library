@@ -8,8 +8,6 @@
 大致思路：
 二分
 
-
-
 提交地址：
 http://poj.org/problem?id=1064
 */

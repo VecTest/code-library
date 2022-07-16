@@ -24,7 +24,7 @@ https://www.luogu.com.cn/problem/P1892
 
 struct DisjointSetsUnion {
     std::vector<int> p;
-    DisjointSetsUnion(int n) : p(n) {
+    DisjointSetsUnion(int n): p(n) {
         std::iota(p.begin(), p.end(), 0);
     }
     DisjointSetsUnion() {

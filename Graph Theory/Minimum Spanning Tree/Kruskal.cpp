@@ -2,7 +2,7 @@
 
 struct DisjointSetsUnion {
     std::vector<int> p, s;
-    DisjointSetsUnion(int n) : p(n), s(n, 1) {
+    DisjointSetsUnion(int n): p(n), s(n, 1) {
         std::iota(p.begin(), p.end(), 0);
     }
     DisjointSetsUnion() {

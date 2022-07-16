@@ -5,8 +5,6 @@
 大致思路：
 种类并查集
 
-
-
 提交地址：
 http://poj.org/problem?id=1703
 */
@@ -16,7 +14,7 @@ struct DisjointSetsUnion {
     DisjointSetsUnion() {
 
     }
-    DisjointSetsUnion(int n) : p(n), s(n, 1) {
+    DisjointSetsUnion(int n): p(n), s(n, 1) {
         for (int i = 0; i < n; i++) {
             p[i] = i;
         }
@@ -55,7 +53,7 @@ void solve() {
     for (int i = 0; i < m; i++) {
         char opt;
         int x, y;
-        scanf(" %c %d %d", &opt, &x, &y);
+        scanf(" %c%d%d", &opt, &x, &y);
         x--;
         y--;
         if (opt == 'A') {
@@ -81,9 +79,5 @@ int main() {
         solve();
     }
 
-#ifdef LOCAL
-    std::cout << std::flush;
-    system("pause");
-#endif
     return 0;
 }

@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 
-// Record: https://judge.yosupo.jp/submission/92516
+// Record: https://judge.yosupo.jp/submission/93208
 
 struct DisjointSetsUnion {
     std::vector<int> p, s;
-    DisjointSetsUnion(int n) : p(n), s(n, 1) {
+    DisjointSetsUnion(int n): p(n), s(n, 1) {
         std::iota(p.begin(), p.end(), 0);
     }
     DisjointSetsUnion() {

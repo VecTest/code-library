@@ -4,8 +4,6 @@
 大致思路：
 博弈论
 
-
-
 提交地址：
 http://poj.org/problem?id=2484
 */
