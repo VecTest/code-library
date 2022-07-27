@@ -1,7 +1,5 @@
 #include <bits/stdc++.h>
 
-// Record: https://judge.yosupo.jp/submission/95105
-
 const int N = 5e5, LOG = 18;
 
 struct SparseTable {

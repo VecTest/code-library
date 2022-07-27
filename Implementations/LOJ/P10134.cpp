@@ -1,5 +1,13 @@
 #include <bits/stdc++.h>
 
+/*
+大致思路：
+倍增 + 最近公共祖先
+
+提交地址：
+https://loj.ac/p/10134
+*/
+
 const int N = 1e5, LOG = 16;
 const int S = 0, P = -1;
 
@@ -57,10 +65,35 @@ int LCA(int u, int v) {
 	return f[u][0];
 }
 
-int length(int u, int v) {
-	return depth[u] + depth[v] - 2 * depth[LCA(u, v)];
-}
-
 int distance(int u, int v) {
 	return dist[u] + dist[v] - 2 * dist[LCA(u, v)];
+}
+
+int main() {
+	int n, m;
+	scanf("%d%d", &n, &m);
+
+	e = std::vector<std::vector<Edge>>(n);
+	for (int i = 0; i < n - 1; i++) {
+		int u, v, w;
+		scanf("%d%d%d", &u, &v, &w);
+		u--;
+		v--;
+		e[u].push_back({v, w});
+		e[v].push_back({u, w});
+	}
+
+	process(n, S);
+	for (int i = 0; i < m; i++) {
+		int u, v;
+		scanf("%d%d", &u, &v);
+		u--;
+		v--;
+		printf("%d\n", distance(u, v));
+	}
+
+#ifdef LOCAL
+	system("pause");
+#endif
+	return 0;
 }

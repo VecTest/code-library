@@ -1,7 +1,5 @@
 #include <bits/stdc++.h>
 
-// Record: https://judge.yosupo.jp/submission/93208
-
 struct DisjointSetsUnion {
     std::vector<int> p, s;
     DisjointSetsUnion(int n): p(n), s(n, 1) {
@@ -10,15 +8,15 @@ struct DisjointSetsUnion {
     DisjointSetsUnion() {
 
     }
-    int find(int x) {
-        return p[x] = (x == p[x] ? x : find(p[x]));
+    int get(int x) {
+        return p[x] = (x == p[x] ? x : get(p[x]));
     }
     bool same(int x, int y) {
-        return find(x) == find(y);
+        return get(x) == get(y);
     }
     bool merge(int x, int y) {
-        x = find(x);
-        y = find(y);
+        x = get(x);
+        y = get(y);
         if (x == y) {
             return false;
         }
@@ -30,7 +28,7 @@ struct DisjointSetsUnion {
         return true;
     }
     int size(int x) {
-        return s[find(x)];
+        return s[get(x)];
     }
 };
 using DSU = DisjointSetsUnion;

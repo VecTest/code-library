@@ -1,30 +1,39 @@
 #include <bits/stdc++.h>
 
+const int N = 1e4;
+const int INF = std::numeric_limits<int>::max();
+
 struct Edge {
-    int u, v;
-    int w;
+    int v, w;
 };
 
-const int INF = std::numeric_limits<int>::max();
-std::vector<int> Bellman_Ford(int n, int s, std::vector<Edge> &e) {
-    std::vector<int> d(n, INF);
-    d[s] = 0;
+int dist[N];
 
-    bool f = true;
-    for (int i = 0; i < n && f; i++) {
-        f = false;
-        for (auto &x : e) {
-            int u = x.u, v = x.v;
-            int w = x.w;
-            if (d[u] == INF) {
-                continue;
-            } else if (d[v] > d[u] + w) {
-                d[v] = d[u] + w;
-                f = true;
+void Bellman_Ford(int n, int s, std::vector<std::vector<Edge>> &e) {
+    std::queue<int> q;
+    bool f[N];
+
+    std::fill(dist, dist + n, INF);
+    dist[s] = 0;
+    q.push(s);
+    std::fill(f, f + n, false);
+    f[s] = true;
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        f[u] = false;
+
+        for (int i = 0; i < (int) e[u].size(); i++) {
+            int v = e[u][i].v, w = e[u][i].w;
+            if (dist[v] > dist[u] + w) {
+                dist[v] = dist[u] + w;
+                if (!f[v]) {
+                    q.push(v);
+                    f[v] = true;
+                }
             }
         }
     }
-
-    assert(f == false);
-    return d;
 }
